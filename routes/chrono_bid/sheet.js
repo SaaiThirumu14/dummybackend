@@ -1,0 +1,49 @@
+const { google } = require("googleapis");
+const path = require("path");
+
+// Path to your service account credentials
+const auth = new google.auth.GoogleAuth({
+  keyFile: path.join(__dirname, "../../synposium-373a1c643231.json"),
+  scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+});
+
+const SHEET_ID = "1I5wGkikf1yrPo8X1u6QR3WFjT_kyB8P-MZQhH-BcEAY"; // ✅ Your Google Sheet ID
+
+const insertIntoSheet = async (data) => {
+  try {
+    const client = await auth.getClient();
+    const sheets = google.sheets({ version: "v4", auth: client });
+
+    const values = [
+      new Date().toLocaleString(),      // Timestamp
+      data.teamName,
+      data.collegeName,
+      data.year,
+      data.event,
+      data.member1.name,
+      data.member1.phone,
+      data.member1.email,
+      data.member2?.name || "",
+      data.member2?.phone || "",
+      data.member2?.email || "",
+      data.member3?.name || "",
+      data.member3?.phone || "",
+      data.member3?.email || "",
+    ];
+
+    await sheets.spreadsheets.values.append({
+      spreadsheetId: SHEET_ID,
+      range: "Chronobid!A2", // ✅ Sheet/tab name and starting range
+      valueInputOption: "USER_ENTERED",
+      resource: {
+        values: [values],
+      },
+    });
+
+    console.log("✅ Data successfully added to Google Sheet: Chrono Bid");
+  } catch (error) {
+    console.error("❌ Google Sheet Error:", error.message);
+  }
+};
+
+module.exports = insertIntoSheet;
