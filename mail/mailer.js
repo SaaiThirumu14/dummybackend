@@ -1,18 +1,12 @@
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
-const fs = require("fs");
-
-// Load service account credentials from Render secret file
-const serviceAccount = JSON.parse(
-  fs.readFileSync("/etc/secrets/GOOGLE_SERVICE_ACCOUNT", "utf8")
-);
 
 const SCOPES = ["https://www.googleapis.com/auth/gmail.send"];
 
 const jwtClient = new google.auth.JWT(
-  serviceAccount.client_email,
+  process.env.GOOGLE_CLIENT_EMAIL,
   null,
-  serviceAccount.private_key,
+  process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'), // Convert \n back to actual newlines
   SCOPES
 );
 
@@ -25,10 +19,10 @@ const sendMail = async (members, college, eventName) => {
       service: "gmail",
       auth: {
         type: "OAuth2",
-        user: process.env.GMAIL_SENDER, // Keep this in .env
+        user: process.env.GMAIL_SENDER,
         accessToken,
-        clientId: serviceAccount.client_id,
-        clientSecret: "", // Not required when using JWT for service account
+        clientId: null,
+        clientSecret: null,
         refreshToken: null,
       },
     });

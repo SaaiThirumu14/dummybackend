@@ -6,7 +6,7 @@ const credentials = JSON.parse(
   fs.readFileSync('/etc/secrets/GOOGLE_SERVICE_ACCOUNT', 'utf8')
 );
 
-const SHEET_ID = ''; // ✅ Your Google Sheet ID
+const SHEET_ID = process.env.SHEET_ID; // ✅ Your Google Sheet ID
 const SHEET_NAME = 'CyberHeist';
 
 const auth = new google.auth.GoogleAuth({
