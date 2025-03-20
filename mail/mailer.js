@@ -1,19 +1,23 @@
 const nodemailer = require("nodemailer");
 const { google } = require("googleapis");
-require("dotenv").config();
+const fs = require("fs");
+
+// Load service account credentials from Render secret file
+const serviceAccount = JSON.parse(
+  fs.readFileSync("/etc/secrets/GOOGLE_SERVICE_ACCOUNT", "utf8")
+);
 
 const SCOPES = ["https://www.googleapis.com/auth/gmail.send"];
 
 const jwtClient = new google.auth.JWT(
-  process.env.GOOGLE_SERVICE_CLIENT_EMAIL,
+  serviceAccount.client_email,
   null,
-  process.env.GOOGLE_SERVICE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+  serviceAccount.private_key,
   SCOPES
 );
 
 const sendMail = async (members, college, eventName) => {
   try {
-    // Authorize the service account and get the access token
     const tokens = await jwtClient.authorize();
     const accessToken = tokens.access_token;
 
@@ -21,10 +25,10 @@ const sendMail = async (members, college, eventName) => {
       service: "gmail",
       auth: {
         type: "OAuth2",
-        user: process.env.GMAIL_SENDER,
+        user: process.env.GMAIL_SENDER, // Keep this in .env
         accessToken,
-        clientId: jwtClient._clientId,
-        clientSecret: jwtClient._clientSecret,
+        clientId: serviceAccount.client_id,
+        clientSecret: "", // Not required when using JWT for service account
         refreshToken: null,
       },
     });

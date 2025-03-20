@@ -1,8 +1,13 @@
 const { google } = require('googleapis');
-const credentials = require('../../synposium-373a1c643231.json'); // Your service account key file
+const fs = require('fs');
 
-const SHEET_ID = '1I5wGkikf1yrPo8X1u6QR3WFjT_kyB8P-MZQhH-BcEAY';
-const SHEET_NAME = 'Cyber-heist';
+// Load service account credentials from Render secret file
+const credentials = JSON.parse(
+  fs.readFileSync('/etc/secrets/GOOGLE_SERVICE_ACCOUNT', 'utf8')
+);
+
+const SHEET_ID = ''; // ✅ Your Google Sheet ID
+const SHEET_NAME = 'CyberHeist';
 
 const auth = new google.auth.GoogleAuth({
   credentials,
@@ -27,19 +32,17 @@ const insertIntoSheet = async (data) => {
     data.member2.email,
   ]];
 
-  const resource = {
-    values,
-  };
+  const resource = { values };
 
   try {
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: `CyberHeist!A1`, // Adjust as needed
+      range: `${SHEET_NAME}!A1`, // You can adjust this starting cell
       valueInputOption: 'USER_ENTERED',
       resource,
     });
 
-    console.log('✅ Data added to Google Sheet');
+    console.log('✅ Data added to Google Sheet: Cyber Heist');
   } catch (err) {
     console.error('❌ Error appending data to Google Sheet:', err);
     throw err;

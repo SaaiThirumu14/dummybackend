@@ -1,14 +1,18 @@
 const { google } = require("googleapis");
-const creds = require("../../synposium-373a1c643231.json"); // Path to your service account key
+const fs = require("fs");
 
-const SHEET_ID = "1I5wGkikf1yrPo8X1u6QR3WFjT_kyB8P-MZQhH-BcEAY"; // Google Sheet ID
+const SHEET_ID = process.env.SHEET_ID; // Google Sheet ID
 const SHEET_NAME = "Timelesstruth"; // Sheet tab name
 
 const insertIntoSheet = async (data) => {
   try {
-    // Auth
+    // Load service account JSON from Render's Secret Files
+    const serviceAccount = JSON.parse(
+      fs.readFileSync("/etc/secrets/GOOGLE_SERVICE_ACCOUNT", "utf8")
+    );
+
     const auth = new google.auth.GoogleAuth({
-      credentials: creds,
+      credentials: serviceAccount,
       scopes: ["https://www.googleapis.com/auth/spreadsheets"],
     });
 
@@ -35,10 +39,9 @@ const insertIntoSheet = async (data) => {
       data.member4?.email || "",
     ];
 
-    // Append to sheet
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: `${SHEET_NAME}!A2`, // Start cell, will auto-insert below last row
+      range: `${SHEET_NAME}!A2`,
       valueInputOption: "USER_ENTERED",
       insertDataOption: "INSERT_ROWS",
       requestBody: {

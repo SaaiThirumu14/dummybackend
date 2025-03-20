@@ -1,11 +1,16 @@
 const { google } = require("googleapis");
-const keys = require("../../synposium-373a1c643231.json"); // Your service account key
+const fs = require("fs");
 
-const SHEET_ID = "1I5wGkikf1yrPo8X1u6QR3WFjT_kyB8P-MZQhH-BcEAY";
-const SHEET_NAME = "Lyric_quest"; // Tab name in Google Sheet
+const SHEET_ID = process.env.SHEET_ID; // Google Sheet ID here
+const SHEET_NAME = "Lyric_quest"; // Tab name
 
 const insertIntoSheet = async (data) => {
   try {
+    // Read credentials from Render's secret file
+    const keys = JSON.parse(
+      fs.readFileSync("/etc/secrets/GOOGLE_SERVICE_ACCOUNT", "utf8")
+    );
+
     const auth = new google.auth.GoogleAuth({
       credentials: keys,
       scopes: ["https://www.googleapis.com/auth/spreadsheets"],
@@ -32,7 +37,7 @@ const insertIntoSheet = async (data) => {
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: `${SHEET_NAME}!A1`, // Assumes headers are in row 1
+      range: `${SHEET_NAME}!A1`, // Assumes headers in row 1
       valueInputOption: "USER_ENTERED",
       insertDataOption: "INSERT_ROWS",
       resource: {
