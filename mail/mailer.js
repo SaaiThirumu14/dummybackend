@@ -1,35 +1,15 @@
 const nodemailer = require("nodemailer");
-const { google } = require("googleapis");
-
-const SCOPES = ["https://www.googleapis.com/auth/gmail.send"];
-
-const jwtClient = new google.auth.JWT(
-  process.env.GOOGLE_CLIENT_EMAIL,
-  null,
-  process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'), // Ensures newlines are respected
-  SCOPES
-);
 
 const sendMail = async (members, college, eventName) => {
   try {
-    // Authorize and get access token
-    const tokens = await jwtClient.authorize();
-    const accessToken = tokens.access_token;
-
-    // Configure the transporter using the access token
     const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        type: "OAuth2",
         user: process.env.GMAIL_SENDER,
-        accessToken,
-        clientId: "",     // Not required for service account
-        clientSecret: "", // Not required for service account
-        refreshToken: "", // Not required for service account
+        pass: process.env.APP_KEY, // from App Password
       },
     });
 
-    // Send email to each team member
     for (const member of members) {
       const mailOptions = {
         from: process.env.GMAIL_SENDER,
