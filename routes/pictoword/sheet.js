@@ -29,12 +29,18 @@ const insertIntoSheet = async (data) => {
         data.member1.name,
         data.member1.phone,
         data.member1.email,
+        data.member1.collegeName,
+        data.member1.year,
         data.member2.name,
         data.member2.phone,
         data.member2.email,
+        data.member2.collegeName,
+        data.member2.year,
         data.member3?.name || "",
         data.member3?.phone || "",
         data.member3?.email || "",
+        data.member3?.collegeName || "",
+        data.member3?.year || "",
       ],
     ];
 

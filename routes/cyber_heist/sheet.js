@@ -21,15 +21,17 @@ const insertIntoSheet = async (data) => {
   const values = [[
     new Date().toLocaleString(),
     data.teamName,
-    data.collegeName,
-    data.year,
     data.event,
     data.member1.name,
     data.member1.phone,
     data.member1.email,
+    data.member1.collegeName,
+    data.member1.year,
     data.member2.name,
     data.member2.phone,
     data.member2.email,
+    data.member2.collegeName,
+    data.member2.year,
   ]];
 
   const resource = { values };
@@ -37,7 +39,7 @@ const insertIntoSheet = async (data) => {
   try {
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: `${SHEET_NAME}!A1`, // You can adjust this starting cell
+      range: `${SHEET_NAME}!A2`, // You can adjust this starting cell
       valueInputOption: 'USER_ENTERED',
       resource,
     });

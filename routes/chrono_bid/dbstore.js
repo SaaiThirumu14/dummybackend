@@ -41,7 +41,7 @@ const chronoBidRegister = async (data, res) => {
     const teamMembers = [member1, member2, member3].filter(
       (m) => m?.name && m?.email
     );
-    sendMail(teamMembers, event);
+    sendMail(teamMembers,teamName, event);
 
     res.status(200).send("Chrono Bid Registered Successfully");
   } catch (err) {

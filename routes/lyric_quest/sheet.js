@@ -29,15 +29,19 @@ const insertIntoSheet = async (data) => {
         data.member1.name,
         data.member1.phone,
         data.member1.email,
+        data.member1.collegeName,
+        data.member1.year,
         data.member2.name,
         data.member2.phone,
         data.member2.email,
+        data.member2.collegeName,
+        data.member2.year,
       ],
     ];
 
     await sheets.spreadsheets.values.append({
       spreadsheetId: SHEET_ID,
-      range: `${SHEET_NAME}!A1`, // Assumes headers in row 1
+      range: `${SHEET_NAME}!A2`, // Assumes headers in row 1
       valueInputOption: "USER_ENTERED",
       insertDataOption: "INSERT_ROWS",
       resource: {
