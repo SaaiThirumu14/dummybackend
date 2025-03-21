@@ -9,7 +9,7 @@ const lyricQuestRegister = async (data, res) => {
     // Step 1: Check team limit
     const snapshot = await db.collection("lyric_quest").get();
     if (snapshot.size >= 30) {
-      return res.status(400).send("❌ Team limit reached for Lyric Quest (Max 30 teams)");
+      return snapshot.size;
     }
 
     // Step 2: Prepare Firestore data
