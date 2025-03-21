@@ -29,9 +29,7 @@ const cyberHeistRegister = async (data, res) => {
     // Step 1: Check team limit
     const snapshot = await cyberHeistRef.get();
     if (snapshot.size >= 30) {
-      return res
-        .status(400)
-        .send("❌ Team limit reached for Cyber Heist (Max 30 teams)");
+      return snapshot.size;
     }
 
     // Step 2: Insert into Firestore
