@@ -16,7 +16,7 @@ const timelessTruthsRegister = async (data, res) => {
     // Step 1: Check team limit
     const snapshot = await db.collection("timeless_truths").get();
     if (snapshot.size >= 35) {
-      return res.status(400).send("❌ Team limit reached for Timeless Truths (Max 35 teams)");
+      return snapshot.size;
     }
 
     // Step 2: Prepare data
