@@ -12,7 +12,7 @@ router.post("/", (req, res) => {
 router.get("/count", async (req, res) => {
   try {
     const snapshot = await db.collection("chrono_bid").get();
-    res.json({ count: snapshot.size }); // snapshot.size gives the count
+    return snapshot.size // snapshot.size gives the count
   } catch (err) {
     console.error("Error fetching count:", err);
     res.status(500).json({ error: "Server Error" });
