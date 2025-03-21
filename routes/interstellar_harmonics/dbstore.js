@@ -14,9 +14,7 @@ const interstellarHarmonicsRegister = async (data, res) => {
     // Step 1: Check team limit (Max 10 teams)
     const snapshot = await db.collection("interstellar_harmonics").get();
     if (snapshot.size >= 10) {
-      return res
-        .status(400)
-        .send("❌ Team limit reached for Interstellar Harmonics (Max 10 teams)");
+      return snapshot.size;
     }
 
     // Step 2: Insert data into Firestore
