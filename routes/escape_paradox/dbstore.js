@@ -9,9 +9,7 @@ const escapeParadoxRegister = async (data, res) => {
     // Step 1: Check if team limit (20) reached
     const snapshot = await db.collection("escape_paradox").get();
     if (snapshot.size >= 20) {
-      return res
-        .status(400)
-        .send("❌ Team limit reached for Escape Paradox (Max 20 teams)");
+      return snapshot.size;
     }
 
     // Step 2: Prepare registration data
