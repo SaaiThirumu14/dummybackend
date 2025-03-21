@@ -16,7 +16,7 @@ const chronoBidRegister = async (data, res) => {
 
     // Check current number of documents (team count)
     const snapshot = await chronoBidRef.get();
-    if (snapshot.size >= 35) {
+    if (snapshot.size >= 30) {
       return snapshot.size;
     }
 
