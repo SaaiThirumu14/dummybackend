@@ -9,7 +9,7 @@ const pictowordRegister = async (data, res) => {
     // Step 1: Team limit check
     const snapshot = await db.collection("pictoword").get();
     if (snapshot.size >= 30) {
-      return res.status(400).send("❌ Team limit reached for Pictoword (Max 30 teams)");
+      return snapshot.size;
     }
 
     // Step 2: Insert into Firestore
