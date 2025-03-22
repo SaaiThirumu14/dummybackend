@@ -22,8 +22,6 @@ const insertIntoSheet = async (data) => {
     const row = [
       new Date().toLocaleString(),
       data.teamName,
-      data.collegeName,
-      data.year,
       data.event,
       data.member1.name,
       data.member1.phone,
