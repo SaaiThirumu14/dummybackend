@@ -4,10 +4,26 @@ const register = require("./dbstore");
 const db = require("../../config/dbconnection"); // ✅ Firebase config
 
 // POST - Register team
-router.post("/", (req, res) => {
-  register(req.body, res);
-});
+router.post("/", async (req, res) => {
+  const { teamName } = req.body;
 
+  try {
+    const snapshot = await db
+      .collection("escape_paradox")
+      .where("teamName", "==", teamName)
+      .get();
+
+    if (!snapshot.empty) {
+      return res.status(409).json({ message: "Team name already exists" });
+    }
+
+    // Proceed to register
+    register(req.body, res);
+  } catch (err) {
+    console.error("Error checking team name:", err);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 // GET - Count registered teams
 router.get("/count", async (req, res) => {
   try {
