@@ -3,9 +3,25 @@ const router = express.Router();
 const db = require("../../config/dbconnection"); // Firestore config
 const cyberHeistRegister = require("./dbstore");
 
-// POST: Register a team
-router.post("/", (req, res) => {
-  cyberHeistRegister(req.body, res);
+router.post("/", async (req, res) => {
+  const { teamName } = req.body;
+
+  try {
+    const snapshot = await db
+      .collection("cyber_heist")
+      .where("teamName", "==", teamName)
+      .get();
+
+    if (!snapshot.empty) {
+      return res.status(409).json({ message: "Team name already exists" });
+    }
+
+    // Proceed to register
+    cyberHeistRegister(req.body, res);
+  } catch (err) {
+    console.error("Error checking team name:", err);
+    res.status(500).json({ message: "Server error" });
+  }
 });
 
 // GET: Count registered teams
